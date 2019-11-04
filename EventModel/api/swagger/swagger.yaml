@@ -1,0 +1,108 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: Event Model
+  description: 'Used to store and get Event Information' 
+# during dev, should point to your local machine
+host: localhost:8080
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /events:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: events
+    post:
+      description: add Events to the table
+      # used as the method name of the controller
+      operationId: addEvent
+      parameters:
+        - name: Event_Name
+          in: query
+          description: The name of the Event to be registered
+          required: true
+          type: string
+          
+        - name: Event_Type
+          in: query
+          description: The type of the Event to be registered
+          required: true
+          type: string
+        - name: Event_City
+          in: query
+          description: The city where the Event is being held
+          required: true
+          type: string
+        - name: Total_Seats
+          in: query
+          description: Totalseats for the event
+          required: true
+          type: integer
+        - name: Ticket_Price
+          in: query
+          description: Ticket Price for the event
+          required: true
+          type: integer
+          
+      responses:
+        "200":
+          description: registered events successfully
+          schema:
+            $ref: "#/definitions/registeredEventsResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    get:
+      description: get all Events from the table
+      # used as the method name of the controller
+      operationId: getEvents
+      responses:
+        "200":
+          description: Retrieved all Events successfully.
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/getallEventsResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  getallEventsResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  registeredEventsResponse:
+    required:
+      - message
+    properties:
+      message:
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        
+        
+        
+        
+        
+        
